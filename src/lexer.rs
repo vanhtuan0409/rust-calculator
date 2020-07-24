@@ -1,4 +1,4 @@
-use crate::token::Token;
+use crate::token::{self, Token};
 
 pub struct Lexer {
     pos: usize,
@@ -50,12 +50,12 @@ impl Iterator for Lexer {
         }
 
         let token = match self.peak() {
-            Some('(') => Some(Token::LBracket),
-            Some(')') => Some(Token::RBracket),
-            Some('+') => Some(Token::Add),
-            Some('-') => Some(Token::Subtract),
-            Some('*') | Some('x') | Some('X') => Some(Token::Mul),
-            Some('/') | Some(':') => Some(Token::Div),
+            Some('(') => Some(token::LBRACKET),
+            Some(')') => Some(token::RBRACKET),
+            Some('+') => Some(token::ADD),
+            Some('-') => Some(token::SUB),
+            Some('*') | Some('x') | Some('X') => Some(token::MUL),
+            Some('/') | Some(':') => Some(token::DIV),
             Some('0'..='9') => Some(self.scan_number()),
             Some(_) => Some(Token::Unknown),
             None => None,
