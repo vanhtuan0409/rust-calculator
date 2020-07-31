@@ -17,12 +17,16 @@ impl Lexer {
         self.input.get(self.pos)
     }
 
+    fn peak_ahead(&self) -> Option<&char> {
+        self.input.get(self.pos + 1)
+    }
+
     fn scan_number(&mut self) -> Token {
         let mut buf = String::new();
         loop {
             let mut should_break = false;
             match self.peak() {
-                None | Some(' ') => should_break = true,
+                None => should_break = true,
                 Some(digit @ '1'..='9') => buf.push(*digit),
                 Some('.') => buf.push('.'),
                 Some(_) => {
@@ -38,18 +42,21 @@ impl Lexer {
         }
         Token::Number(buf.parse().unwrap())
     }
+
+    fn scan_ws(&mut self) -> Token {
+        while let Some(' ') = self.peak_ahead() {
+            self.pos += 1;
+        }
+        Token::WS
+    }
 }
 
 impl Iterator for Lexer {
     type Item = Token;
 
     fn next(&mut self) -> Option<Token> {
-        // skip whitespace
-        while let Some(' ') = self.peak() {
-            self.pos += 1;
-        }
-
         let token = match self.peak() {
+            Some(' ') => Some(self.scan_ws()),
             Some('(') => Some(token::LBRACKET),
             Some(')') => Some(token::RBRACKET),
             Some('+') => Some(token::ADD),

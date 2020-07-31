@@ -1,6 +1,7 @@
 #[derive(Debug, PartialEq)]
 pub enum Token {
     Unknown,
+    WS,
 
     Sep(char),
     Op(char),
@@ -15,3 +16,7 @@ pub const ADD: Token = Token::Op('+');
 pub const SUB: Token = Token::Op('-');
 pub const MUL: Token = Token::Op('*');
 pub const DIV: Token = Token::Op('/');
+
+trait Expression {
+    fn evaluate(&self) -> i32;
+}
