@@ -1,9 +1,10 @@
+mod ast;
 mod error;
-mod lexer;
-mod token;
+mod tokenizer;
 
 use error::{ExitError, Result};
 use std::{env, process};
+use tokenizer::Tokenizer;
 
 fn main() {
     match try_main() {
@@ -17,8 +18,8 @@ fn main() {
 
 fn try_main() -> Result<()> {
     let input = env::args().skip(1).collect::<Vec<String>>().join(" ");
-    let lexer = lexer::Lexer::new(&input);
-    for token in lexer {
+    let tokens = Tokenizer::new(&input);
+    for token in tokens {
         println!("{:?}", token)
     }
     Ok(())
